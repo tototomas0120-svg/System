@@ -36,12 +36,15 @@
 </head>
 <body class="bg-[#08090A] text-slate-100 antialiased selection:bg-sky-500/30 selection:text-sky-200">
 
-    <!-- CLIENT AUTH / LOGIN GATEWAY (Real Security Prototype) -->
+    <!-- CLIENT AUTH / LOGIN GATEWAY -->
     <div id="auth-screen" class="fixed inset-0 z-[120] bg-[#08090A] flex flex-col items-center justify-center p-4">
         <div class="absolute w-96 h-96 bg-sky-500/10 rounded-full blur-3xl glow-effect pointer-events-none"></div>
         <div class="relative z-10 w-full max-w-md bg-[#121316] border border-[#1F242C] p-8 rounded-3xl shadow-2xl space-y-6 animate-fade">
             <div class="flex flex-col items-center text-center space-y-3">
-                <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-sky-600 to-sky-400 flex items-center justify-center text-slate-950 font-bold text-2xl shadow-xl shadow-sky-500/30">M</div>
+                <!-- LOGO IN LOGIN SCREEN -->
+                <div class="w-14 h-14 rounded-2xl bg-[#08090A] border border-[#1F242C] flex items-center justify-center shadow-xl shadow-sky-500/20 overflow-hidden p-1">
+                    <img src="1.png" class="w-full h-full object-cover rounded-xl" alt="Media Magic Logo">
+                </div>
                 <div>
                     <h1 class="text-xl font-bold tracking-wider text-white">MEDIA MAGIC</h1>
                     <p class="text-xs text-slate-400 font-mono mt-1" data-i18n="authSubtitle">Secure Client Portal Gateway</p>
@@ -61,7 +64,7 @@
             </form>
 
             <div class="pt-4 border-t border-[#1F242C] text-center">
-                <p class="text-[10px] font-mono text-slate-500">Architected & Developed by <span class="text-sky-400 font-bold">Thomas Malak</span></p>
+                <p class="text-[11px] font-sans text-slate-400">Created by <span class="text-sky-400 font-bold tracking-wide">ENG/Thomas Malak</span></p>
             </div>
         </div>
     </div>
@@ -70,7 +73,9 @@
     <div id="loading-screen" class="fixed inset-0 z-[100] bg-[#08090A] flex flex-col items-center justify-center transition-all duration-1000 hidden">
         <div class="absolute w-96 h-96 bg-sky-500/10 rounded-full blur-3xl glow-effect pointer-events-none"></div>
         <div class="relative z-10 flex flex-col items-center text-center space-y-6 max-w-sm px-6">
-            <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-sky-600 to-sky-400 flex items-center justify-center text-slate-950 font-bold text-3xl shadow-2xl shadow-sky-500/40 transform hover:scale-105 transition">M</div>
+            <div class="w-16 h-16 rounded-2xl bg-[#121316] border border-[#1F242C] flex items-center justify-center shadow-2xl shadow-sky-500/30 overflow-hidden p-1.5 transform hover:scale-105 transition">
+                <img src="1.png" class="w-full h-full object-cover rounded-xl" alt="Logo">
+            </div>
             <div class="space-y-1">
                 <h1 class="text-2xl font-bold tracking-wider text-white">MEDIA MAGIC</h1>
                 <p id="load-subtitle" class="text-xs uppercase tracking-widest text-slate-400 font-mono">Enterprise Ecosystem</p>
@@ -92,7 +97,10 @@
         <aside class="hidden lg:flex flex-col w-64 bg-[#0B0C0E] border-r border-[#1F242C] z-30 select-none flex-shrink-0 sidebar-container">
             <div class="p-6 border-b border-[#1F242C] flex items-center justify-between">
                 <div class="flex items-center space-x-3 brand-box">
-                    <div class="w-8 h-8 rounded-lg bg-sky-500 flex items-center justify-center text-slate-950 font-bold text-base shadow-md shadow-sky-500/20">M</div>
+                    <!-- SIDEBAR HEADER LOGO -->
+                    <div class="w-9 h-9 rounded-xl bg-[#121316] border border-[#1F242C] flex items-center justify-center shadow-md overflow-hidden p-0.5">
+                        <img src="1.png" class="w-full h-full object-cover rounded-lg" alt="Logo">
+                    </div>
                     <div>
                         <h1 class="font-bold text-sm tracking-tight text-white leading-none">MEDIA MAGIC</h1>
                         <span class="text-[10px] text-slate-400 uppercase tracking-wider font-mono" data-i18n="sidebarSub">Client Portal</span>
@@ -104,20 +112,22 @@
                 <!-- Dynamically Rendered by Language Engine -->
             </nav>
 
-            <!-- DEVELOPER SIGNATURE FOOTER -->
+            <!-- DEVELOPER SIGNATURE FOOTER WITH LOGO/AVATAR -->
             <div class="p-4 border-t border-[#1F242C] bg-[#08090A] flex flex-col space-y-3">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center space-x-3 user-info-box">
-                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop" class="w-9 h-9 rounded-full object-cover border border-slate-700">
+                        <div class="w-9 h-9 rounded-xl bg-[#121316] border border-[#1F242C] flex items-center justify-center shadow-md overflow-hidden p-0.5">
+                            <img src="1.png" class="w-full h-full object-cover rounded-lg" alt="Thomas Malak">
+                        </div>
                         <div class="overflow-hidden">
-                            <h4 id="active-user-name" class="text-xs font-bold text-white truncate">Thomas Malak</h4>
-                            <p class="text-[10px] text-slate-400 truncate" data-i18n="adminRole">Lead Architect</p>
+                            <h4 id="active-user-name" class="text-xs font-bold text-white tracking-wide">Thomas Malak</h4>
+                            <p class="text-[10px] text-slate-400 font-medium" data-i18n="adminRole">Lead Architect</p>
                         </div>
                     </div>
                     <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                 </div>
-                <div class="pt-2 border-t border-[#1F242C]/60 text-center">
-                    <p class="text-[10px] font-mono text-slate-400">Created by <span class="text-sky-400 font-semibold">Thomas Malak</span></p>
+                <div class="pt-2.5 border-t border-[#1F242C]/80 text-center">
+                    <p class="text-[11px] font-sans text-slate-400">Created by <span class="text-sky-400 font-bold tracking-wide">Thomas Malak</span></p>
                 </div>
             </div>
         </aside>
@@ -163,7 +173,9 @@
             <div id="mobile-menu" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden lg:hidden flex flex-col p-6">
                 <div class="flex justify-between items-center mb-6">
                     <div class="flex items-center space-x-3">
-                        <div class="w-8 h-8 rounded-lg bg-sky-500 flex items-center justify-center text-slate-950 font-bold text-base">M</div>
+                        <div class="w-9 h-9 rounded-xl bg-[#121316] border border-[#1F242C] flex items-center justify-center shadow-md overflow-hidden p-0.5">
+                            <img src="logo.png" class="w-full h-full object-cover rounded-lg" alt="Logo">
+                        </div>
                         <span class="font-bold text-white">MEDIA MAGIC</span>
                     </div>
                     <button onclick="toggleMobileMenu()" class="text-slate-400 text-xl"><i class="fa-solid fa-xmark"></i></button>
@@ -172,7 +184,7 @@
                     <!-- Mobile Nav Rendered Dynamically -->
                 </nav>
                 <div class="pt-4 border-t border-[#1F242C] text-center">
-                    <p class="text-[11px] font-mono text-slate-400">Created by <span class="text-sky-400 font-semibold">Thomas Malak</span></p>
+                    <p class="text-[11px] font-sans text-slate-400">Created by <span class="text-sky-400 font-bold tracking-wide">Thomas Malak</span></p>
                 </div>
             </div>
 
@@ -190,7 +202,6 @@
     <!-- SCRIPT ENGINE & I18N -->
     <script>
         let currentLang = 'en';
-        let loggedInUser = { name: 'Thomas Malak', role: 'Lead Architect', email: 'admin@mediamagic.io' };
 
         const i18n = {
             en: {
@@ -260,7 +271,7 @@
                 { id: 1, title: 'Secure Login Verified', desc: 'Authorized session established from secure terminal.', time: 'Just now', unread: true }
             ],
             team: [
-                { name: 'Thomas Malak', role: 'Lead Architect', status: 'Online', lastActive: 'Now', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop' }
+                { name: 'Thomas Malak', role: 'Lead Architect', status: 'Online', lastActive: 'Now', avatar: '.1.png' }
             ]
         };
 
@@ -273,10 +284,6 @@
 
         function handleClientLogin(e) {
             e.preventDefault();
-            const email = document.getElementById('login-email').value;
-            const pass = document.getElementById('login-pass').value;
-
-            // Simulating authentic multi-tenant client login
             document.getElementById('auth-screen').style.opacity = '0';
             setTimeout(() => {
                 document.getElementById('auth-screen').remove();
@@ -520,10 +527,7 @@
             `;
         }
 
-        function renderClients(container) {
-            const c = getStore('clients');
-            container.innerHTML = `<div><h2 class="text-xl font-bold text-white">${i18n[currentLang].nav.clients}</h2></div><div class="bg-[#121316] border border-[#1F242C] rounded-2xl p-6 text-xs text-slate-400">Encrypted client tenant active.</div>`;
-        }
+        function renderClients(container) { container.innerHTML = `<div><h2 class="text-xl font-bold text-white">${i18n[currentLang].nav.clients}</h2></div><div class="bg-[#121316] border border-[#1F242C] rounded-2xl p-6 text-xs text-slate-400">Encrypted client tenant active.</div>`; }
         function renderRequests(container) { container.innerHTML = `<div><h2 class="text-xl font-bold text-white">${i18n[currentLang].nav.requests}</h2></div><div class="bg-[#121316] border border-[#1F242C] rounded-2xl p-6 text-xs text-slate-400">Incoming webhook queue active.</div>`; }
         function renderOrders(container) { container.innerHTML = `<div><h2 class="text-xl font-bold text-white">${i18n[currentLang].nav.orders}</h2></div><div class="bg-[#121316] border border-[#1F242C] rounded-2xl p-6 text-xs text-slate-400">Media licensing orders active.</div>`; }
         function renderCalendar(container) { container.innerHTML = `<div><h2 class="text-xl font-bold text-white">${i18n[currentLang].nav.calendar}</h2></div><div class="bg-[#121316] border border-[#1F242C] rounded-2xl p-6 text-xs text-slate-400">Milestone schedule synchronized.</div>`; }
