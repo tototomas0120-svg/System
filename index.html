@@ -36,31 +36,33 @@
 </head>
 <body class="bg-[#08090A] text-slate-100 antialiased selection:bg-sky-500/30 selection:text-sky-200">
 
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast-box" class="fixed top-6 right-6 z-[9999] flex flex-col space-y-2 pointer-events-none"></div>
+
     <!-- CLIENT AUTH / LOGIN GATEWAY -->
     <div id="auth-screen" class="fixed inset-0 z-[120] bg-[#08090A] flex flex-col items-center justify-center p-4">
         <div class="absolute w-96 h-96 bg-sky-500/10 rounded-full blur-3xl glow-effect pointer-events-none"></div>
         <div class="relative z-10 w-full max-w-md bg-[#121316] border border-[#1F242C] p-8 rounded-3xl shadow-2xl space-y-6 animate-fade">
             <div class="flex flex-col items-center text-center space-y-3">
-                <!-- LOGO IN LOGIN SCREEN -->
                 <div class="w-14 h-14 rounded-2xl bg-[#08090A] border border-[#1F242C] flex items-center justify-center shadow-xl shadow-sky-500/20 overflow-hidden p-1">
                     <img src="1.png" class="w-full h-full object-cover rounded-xl" alt="Media Magic Logo">
                 </div>
                 <div>
-                    <h1 class="text-xl font-bold tracking-wider text-white">MEDIA MAGIC</h1>
-                    <p class="text-xs text-slate-400 font-mono mt-1" data-i18n="authSubtitle">Secure Client Portal Gateway</p>
+                    <h1 class="text-xl font-bold tracking-wider text-white">تسجيل الدخول</h1>
+                    <p class="text-xs text-slate-400 font-mono mt-1">بوابة المشتركين - اشتراك شهري فعال</p>
                 </div>
             </div>
 
-            <form onsubmit="handleClientLogin(event)" class="space-y-4 text-xs">
+            <form id="auth-form" class="space-y-4 text-xs">
                 <div>
-                    <label class="block text-slate-400 mb-1 font-mono">Client Email / ID</label>
-                    <input type="email" id="login-email" value="admin@mediamagic.io" required class="w-full bg-[#08090A] border border-[#1F242C] rounded-xl px-4 py-2.5 text-slate-200 focus:outline-none focus:border-sky-500 transition">
+                    <label class="block text-slate-400 mb-1 font-mono">البريد الإلكتروني للعميل</label>
+                    <input type="email" id="auth-email" required class="w-full bg-[#08090A] border border-[#1F242C] rounded-xl px-4 py-2.5 text-slate-200 focus:outline-none focus:border-sky-500 transition" placeholder="subscriber@mediamagic.io">
                 </div>
                 <div>
-                    <label class="block text-slate-400 mb-1 font-mono">Secure Access Password</label>
-                    <input type="password" id="login-pass" value="123456" required class="w-full bg-[#08090A] border border-[#1F242C] rounded-xl px-4 py-2.5 text-slate-200 focus:outline-none focus:border-sky-500 transition">
+                    <label class="block text-slate-400 mb-1 font-mono">كلمة المرور الخاصة</label>
+                    <input type="password" id="auth-pass" required class="w-full bg-[#08090A] border border-[#1F242C] rounded-xl px-4 py-2.5 text-slate-200 focus:outline-none focus:border-sky-500 transition" placeholder="********">
                 </div>
-                <button type="submit" class="w-full bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold py-3 rounded-xl transition shadow-lg shadow-sky-500/20">Authenticate & Access Portal</button>
+                <button type="submit" id="auth-submit-btn" class="w-full bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold py-3 rounded-xl transition shadow-lg shadow-sky-500/20">تسجيل الدخول للبوابة</button>
             </form>
 
             <div class="pt-4 border-t border-[#1F242C] text-center">
@@ -84,7 +86,7 @@
                 <div id="loading-bar" class="h-full bg-sky-400 rounded-full w-0 transition-all duration-300"></div>
             </div>
             <div class="flex items-center justify-between w-full text-[11px] font-mono text-slate-500">
-                <span id="loading-status-text">Decrypting secure nodes...</span>
+                <span id="loading-status-text">Connecting to Cloud Firestore...</span>
                 <span id="loading-pct">0%</span>
             </div>
         </div>
@@ -97,31 +99,27 @@
         <aside class="hidden lg:flex flex-col w-64 bg-[#0B0C0E] border-r border-[#1F242C] z-30 select-none flex-shrink-0 sidebar-container">
             <div class="p-6 border-b border-[#1F242C] flex items-center justify-between">
                 <div class="flex items-center space-x-3 brand-box">
-                    <!-- SIDEBAR HEADER LOGO -->
                     <div class="w-9 h-9 rounded-xl bg-[#121316] border border-[#1F242C] flex items-center justify-center shadow-md overflow-hidden p-0.5">
                         <img src="1.png" class="w-full h-full object-cover rounded-lg" alt="Logo">
                     </div>
                     <div>
                         <h1 class="font-bold text-sm tracking-tight text-white leading-none">MEDIA MAGIC</h1>
-                        <span class="text-[10px] text-slate-400 uppercase tracking-wider font-mono" data-i18n="sidebarSub">Client Portal</span>
+                        <span class="text-[10px] text-slate-400 uppercase tracking-wider font-mono">Client Portal</span>
                     </div>
                 </div>
             </div>
 
-            <nav class="flex-1 overflow-y-auto px-4 py-4 space-y-1 text-xs font-medium" id="sidebar-nav">
-                <!-- Dynamically Rendered by Language Engine -->
-            </nav>
+            <nav class="flex-1 overflow-y-auto px-4 py-4 space-y-1 text-xs font-medium" id="sidebar-nav"></nav>
 
-            <!-- DEVELOPER SIGNATURE FOOTER WITH LOGO/AVATAR -->
             <div class="p-4 border-t border-[#1F242C] bg-[#08090A] flex flex-col space-y-3">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center space-x-3 user-info-box">
                         <div class="w-9 h-9 rounded-xl bg-[#121316] border border-[#1F242C] flex items-center justify-center shadow-md overflow-hidden p-0.5">
-                            <img src="1.png" class="w-full h-full object-cover rounded-lg" alt="Thomas Malak">
+                            <img src="1.png" class="w-full h-full object-cover rounded-lg" alt="User">
                         </div>
                         <div class="overflow-hidden">
-                            <h4 id="active-user-name" class="text-xs font-bold text-white tracking-wide">Thomas Malak</h4>
-                            <p class="text-[10px] text-slate-400 font-medium" data-i18n="adminRole">Lead Architect</p>
+                            <h4 id="active-user-email" class="text-xs font-bold text-white tracking-wide truncate max-w-[120px]">Subscriber</h4>
+                            <p class="text-[10px] text-slate-400 font-medium">Verified Client</p>
                         </div>
                     </div>
                     <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -135,7 +133,6 @@
         <!-- MAIN CONTENT AREA -->
         <div class="flex-1 flex flex-col h-screen overflow-hidden bg-[#08090A]">
 
-            <!-- TOP NAVBAR -->
             <header class="h-16 border-b border-[#1F242C] bg-[#08090A]/80 backdrop-blur-md px-6 flex items-center justify-between z-20 flex-shrink-0">
                 <div class="flex items-center space-x-4 topbar-left">
                     <button onclick="toggleMobileMenu()" class="lg:hidden text-slate-400 hover:text-white text-lg p-1">
@@ -143,33 +140,27 @@
                     </button>
                     <div class="relative w-64 sm:w-80">
                         <i class="fa-solid fa-magnifying-glass absolute search-icon top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
-                        <input type="text" id="global-search" oninput="handleGlobalSearch(this.value)" placeholder="Search anything..." class="w-full bg-[#121316] border border-[#1F242C] rounded-lg pl-9 pr-4 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-sky-500 transition">
+                        <input type="text" id="global-search" oninput="handleGlobalSearch(this.value)" placeholder="Search database..." class="w-full bg-[#121316] border border-[#1F242C] rounded-lg pl-9 pr-4 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-sky-500 transition">
                     </div>
                 </div>
 
                 <div class="flex items-center space-x-4 topbar-right">
                     <div class="hidden md:flex items-center space-x-2 text-xs text-slate-400 font-mono bg-[#121316] border border-[#1F242C] px-3 py-1 rounded-full status-pill">
                         <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                        <span data-i18n="systemOperational">Secure Encryption Active</span>
+                        <span>Live Firestore Synced</span>
                     </div>
 
                     <span id="current-date-display" class="hidden xl:inline text-xs text-slate-400 font-mono"></span>
 
-                    <!-- LANGUAGE TOGGLE BUTTON -->
                     <button onclick="toggleLanguage()" id="lang-toggle-btn" class="bg-[#121316] border border-[#1F242C] hover:border-sky-500 px-3 py-1 rounded text-xs font-mono text-sky-400 font-bold transition">عربي</button>
-
-                    <button class="text-slate-400 hover:text-white text-sm p-1.5"><i class="fa-regular fa-circle-question"></i></button>
-
                     <button onclick="switchTab('notifications')" class="relative text-slate-400 hover:text-white text-sm p-1.5">
                         <i class="fa-regular fa-bell"></i>
                         <span class="absolute top-1 notif-dot w-2 h-2 bg-sky-500 rounded-full"></span>
                     </button>
-
                     <button onclick="logoutClient()" class="text-slate-400 hover:text-rose-400 text-sm p-1.5" title="Logout"><i class="fa-solid fa-power-off"></i></button>
                 </div>
             </header>
 
-            <!-- MOBILE MENU DRAWER -->
             <div id="mobile-menu" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden lg:hidden flex flex-col p-6">
                 <div class="flex justify-between items-center mb-6">
                     <div class="flex items-center space-x-3">
@@ -180,37 +171,34 @@
                     </div>
                     <button onclick="toggleMobileMenu()" class="text-slate-400 text-xl"><i class="fa-solid fa-xmark"></i></button>
                 </div>
-                <nav id="mobile-nav-list" class="flex-1 space-y-2 text-sm font-medium overflow-y-auto">
-                    <!-- Mobile Nav Rendered Dynamically -->
-                </nav>
-                <div class="pt-4 border-t border-[#1F242C] text-center">
-                    <p class="text-[11px] font-sans text-slate-400">Created by <span class="text-sky-400 font-bold tracking-wide">Thomas Malak</span></p>
-                </div>
+                <nav id="mobile-nav-list" class="flex-1 space-y-2 text-sm font-medium overflow-y-auto"></nav>
             </div>
 
-            <!-- VIEW CONTAINER -->
-            <div id="main-content" class="flex-1 overflow-y-auto p-6 md:p-8 space-y-8">
-                <!-- DYNAMIC CONTENT -->
-            </div>
-
+            <div id="main-content" class="flex-1 overflow-y-auto p-6 md:p-8 space-y-8"></div>
         </div>
     </div>
 
-    <!-- TOAST BOX -->
-    <div id="toast-box" class="fixed bottom-6 right-6 z-50 flex flex-col space-y-2 pointer-events-none"></div>
+    <!-- MAIN APP SCRIPT -->
+    <script type="module">
+        import { auth, db } from './firebase-config.js';
+        import { 
+            signInWithEmailAndPassword, 
+            signOut, 
+            onAuthStateChanged 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { 
+            collection, 
+            getDocs, 
+            addDoc 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    <!-- SCRIPT ENGINE & I18N -->
-    <script>
         let currentLang = 'en';
+        let currentTab = 'overview';
 
         const i18n = {
             en: {
                 dir: 'ltr',
-                authSubtitle: 'Secure Client Portal Gateway',
                 sidebarSub: 'Client Portal',
-                adminRole: 'Lead Architect',
-                systemOperational: 'Secure Encryption Active',
-                searchPlaceholder: 'Search anything...',
                 nav: {
                     overview: 'Overview', projects: 'Projects', clients: 'Clients', requests: 'Requests',
                     orders: 'Orders', calendar: 'Calendar', transactions: 'Transactions', analytics: 'Analytics',
@@ -218,21 +206,15 @@
                 },
                 sections: { core: 'Core', operations: 'Operations', system: 'System' },
                 overview: {
-                    greeting: "Welcome back, Thomas.",
-                    subtitle: "Here's your isolated client portal performance overview.",
-                    today: 'Today', days7: '7 Days', days30: '30 Days', year: 'This Year',
+                    greeting: "Welcome back.",
+                    subtitle: "Live metrics synchronized directly from Cloud Firestore database.",
                     rev: 'Total Revenue', projects: 'Active Projects', clients: 'Verified Clients', requests: 'Pending Requests', conversion: 'Portal Security',
-                    chartTitle: 'Media & Asset Performance', chartSub: 'Real-time encrypted bandwidth & usage',
-                    activityTitle: 'Portal Security Log', activitySub: 'Encrypted sessions across nodes'
+                    chartTitle: 'Media & Asset Performance', chartSub: 'Live database bandwidth & usage'
                 }
             },
             ar: {
                 dir: 'rtl',
-                authSubtitle: 'بوابة دخول العملاء الآمنة',
                 sidebarSub: 'بوابة العميل',
-                adminRole: 'المهندس الرئيسي',
-                systemOperational: 'التشفير الآمن مفعل',
-                searchPlaceholder: 'البحث في المنظومة...',
                 nav: {
                     overview: 'نظرة عامة', projects: 'المشاريع', clients: 'العملاء', requests: 'الطلبات الواردة',
                     orders: 'الطلبات والحجوزات', calendar: 'التقويم', transactions: 'المعاملات المالية', analytics: 'التحليلات',
@@ -240,61 +222,82 @@
                 },
                 sections: { core: 'الرئيسية', operations: 'العمليات', system: 'النظام' },
                 overview: {
-                    greeting: "مرحباً بك، توماس.",
-                    subtitle: "إليك نظرة شاملة على أداء بوابة العملاء والعمليات الخاصة بك اليوم.",
-                    today: 'اليوم', days7: '7 أيام', days30: '30 يوماً', year: 'هذا العام',
+                    greeting: "مرحباً بك.",
+                    subtitle: "إحصائيات حية متزامنة مباشرة من قاعدة بيانات Cloud Firestore.",
                     rev: 'إجمالي الإيرادات', projects: 'المشاريع النشطة', clients: 'العملاء الموثقون', requests: 'الطلبات المعلقة', conversion: 'أمان البوابة',
-                    chartTitle: 'أداء المحتوى والوسائط', chartSub: 'تتبع النطاق الترددي والاستهلاك لحظياً',
-                    activityTitle: 'سجل أمان البوابة', activitySub: 'الجلسات المشفرة عبر العقد'
+                    chartTitle: 'أداء المحتوى والوسائط', chartSub: 'استهلاك النطاق وقاعدة البيانات لحظياً'
                 }
             }
         };
 
-        const defaultData = {
-            projects: [
-                { id: 'PRJ-201', name: 'Cinematic Video Pipeline', client: 'Media Magic Studio', category: 'Production', status: 'Active', progress: 85, revenue: 35000, deadline: '2026-11-20' },
-                { id: 'PRJ-202', name: 'Brand Identity Redesign', client: 'Stripe Global', category: 'Branding', status: 'Active', progress: 95, revenue: 22000, deadline: '2026-10-30' }
-            ],
-            clients: [
-                { id: 'CLI-01', name: 'Daniel Carter', company: 'Stripe Global', country: 'United States', projects: 2, revenue: 57000, status: 'Active', lastActivity: 'Just now' }
-            ],
-            requests: [
-                { id: 'REQ-901', source: 'Client Portal', client: 'Daniel Carter', type: 'Asset Render Request', date: 'Today', priority: 'High', status: 'Pending' }
-            ],
-            orders: [
-                { id: 'ORD-501', client: 'Daniel Carter', service: 'High-Res Render Package', source: 'Portal', date: 'Oct 08', amount: 1500, payment: 'Paid', status: 'Completed' }
-            ],
-            transactions: [
-                { id: 'TXN-301', client: 'Daniel Carter', type: 'License Settlement', amount: 1500, date: 'Oct 08, 2026', status: 'Successful' }
-            ],
-            notifications: [
-                { id: 1, title: 'Secure Login Verified', desc: 'Authorized session established from secure terminal.', time: 'Just now', unread: true }
-            ],
-            team: [
-                { name: 'Thomas Malak', role: 'Lead Architect', status: 'Online', lastActive: 'Now', avatar: '.1.png' }
-            ]
+        window.showToast = function(title, desc = '') {
+            const box = document.getElementById('toast-box');
+            if (!box) return;
+            const t = document.createElement('div');
+            const alignClass = currentLang === 'ar' ? 'space-x-reverse' : '';
+            t.className = 'pointer-events-auto bg-[#121316] border border-[#1F242C] text-slate-100 px-5 py-4 rounded-2xl shadow-2xl flex items-center space-x-3 ' + alignClass + ' text-xs animate-fade min-w-[280px] max-w-md';
+            t.innerHTML = '<i class="fa-solid fa-circle-exclamation text-sky-400 text-base flex-shrink-0"></i><div class="flex-1"><p class="font-bold text-white text-sm">' + title + '</p>' + (desc ? '<p class="text-slate-300 text-xs mt-1 leading-relaxed">' + desc + '</p>' : '') + '</div>';
+            box.appendChild(t);
+            setTimeout(() => { 
+                t.style.opacity = '0'; 
+                t.style.transition = 'opacity 0.3s ease';
+                setTimeout(() => t.remove(), 300); 
+            }, 6000);
         };
 
-        function getStore(key) {
-            if (!localStorage.getItem('mediamagic_' + key)) {
-                localStorage.setItem('mediamagic_' + key, JSON.stringify(defaultData[key]));
-            }
-            return JSON.parse(localStorage.getItem('mediamagic_' + key));
-        }
+        const authForm = document.getElementById('auth-form');
+        const authSubmitBtn = document.getElementById('auth-submit-btn');
 
-        function handleClientLogin(e) {
+        authForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            document.getElementById('auth-screen').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('auth-screen').remove();
-                document.getElementById('loading-screen').classList.remove('hidden');
-                startLoadingSequence();
-            }, 500);
-        }
+            const email = document.getElementById('auth-email').value;
+            const pass = document.getElementById('auth-pass').value;
+            
+            authSubmitBtn.innerText = 'جاري التحقق من حالة الاشتراك...';
+            
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+                showToast('نجاح تسجيل الدخول', 'تم التحقق من الاشتراك بنجاح، جاري تحميل البوابة...');
+            } catch (error) {
+                let errorMessage = 'البيانات غير صحيحة، يرجى مراجعة الإدارة.';
+                
+                if (error.code === 'auth/user-disabled') {
+                    errorMessage = 'تم تعطيل هذا الحساب لعدم تجديد الاشتراك الشهري. يرجى التواصل مع الإدارة لتجديد الاشتراك واستعادة صلاحية الدخول.';
+                } else if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+                    errorMessage = 'البريد الإلكتروني أو كلمة المرور غير صحيحة. يرجى التحقق وإعادة المحاولة.';
+                } else {
+                    errorMessage = error.message;
+                }
 
-        function logoutClient() {
-            location.reload();
-        }
+                showToast('تنبيه اشتراك المنظومة', errorMessage);
+                authSubmitBtn.innerText = 'تسجيل الدخول للبوابة';
+            }
+        });
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                document.getElementById('active-user-email').innerText = user.email;
+                document.getElementById('auth-screen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('auth-screen').classList.add('hidden');
+                    document.getElementById('loading-screen').classList.remove('hidden');
+                    startLoadingSequence();
+                }, 300);
+            } else {
+                document.getElementById('auth-screen').classList.remove('hidden');
+                document.getElementById('auth-screen').style.opacity = '1';
+                document.getElementById('app-wrapper').style.opacity = '0';
+            }
+        });
+
+        window.logoutClient = async () => {
+            try { 
+                await signOut(auth); 
+                showToast('تسجيل الخروج', 'تم إنهاء الجلسة بأمان');
+            } catch(e) {
+                showToast('خطأ', e.message);
+            }
+        };
 
         function startLoadingSequence() {
             let bar = document.getElementById('loading-bar');
@@ -305,21 +308,21 @@
 
             let progress = 0;
             let interval = setInterval(() => {
-                progress += Math.floor(Math.random() * 20) + 5;
+                progress += 33;
                 if (progress >= 100) {
                     progress = 100;
                     clearInterval(interval);
                     setTimeout(() => {
                         screen.style.opacity = '0';
                         wrapper.style.opacity = '1';
-                        setTimeout(() => screen.remove(), 700);
+                        setTimeout(() => screen.classList.add('hidden'), 700);
                     }, 400);
                 }
                 bar.style.width = progress + '%';
                 pct.innerText = progress + '%';
-                if(progress > 50) statusText.innerText = 'Verifying client credentials & tokens...';
-                if(progress > 85) statusText.innerText = 'Launching secure Media Magic environment...';
-            }, 90);
+                if(progress > 50) statusText.innerText = 'Fetching live Firestore nodes...';
+                if(progress > 85) statusText.innerText = 'Launching Media Magic environment...';
+            }, 100);
 
             updateDateDisplay();
             renderSidebar();
@@ -329,27 +332,21 @@
         function updateDateDisplay() {
             const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
             const locale = currentLang === 'ar' ? 'ar-EG' : 'en-US';
-            document.getElementById('current-date-display').innerText = new Intl.DateTimeFormat(locale, options).format(new Date());
+            const dateEl = document.getElementById('current-date-display');
+            if(dateEl) dateEl.innerText = new Intl.DateTimeFormat(locale, options).format(new Date());
         }
 
-        function toggleLanguage() {
+        window.toggleLanguage = function() {
             currentLang = currentLang === 'en' ? 'ar' : 'en';
             document.documentElement.setAttribute('lang', currentLang);
             document.documentElement.setAttribute('dir', i18n[currentLang].dir);
             document.getElementById('lang-toggle-btn').innerText = currentLang === 'en' ? 'عربي' : 'English';
             
-            const toastBox = document.getElementById('toast-box');
-            toastBox.className = `fixed bottom-6 ${currentLang === 'ar' ? 'left-6' : 'right-6'} z-50 flex flex-col space-y-2 pointer-events-none`;
-
-            const searchInput = document.getElementById('global-search');
-            searchInput.placeholder = i18n[currentLang].searchPlaceholder;
-
             updateDateDisplay();
             renderSidebar();
             switchTab(currentTab);
-        }
+        };
 
-        let currentTab = 'overview';
         const icons = {
             overview: 'fa-chart-pie', projects: 'fa-layer-group', clients: 'fa-users', requests: 'fa-inbox',
             orders: 'fa-cart-shopping', calendar: 'fa-calendar', transactions: 'fa-wallet', analytics: 'fa-chart-line',
@@ -396,151 +393,180 @@
             }
         }
 
-        function switchTab(tabId) {
+        window.switchTab = async function(tabId) {
             currentTab = tabId;
             highlightActiveNav(tabId);
             const content = document.getElementById('main-content');
-            content.innerHTML = '';
+            content.innerHTML = '<div class="flex justify-center items-center py-20"><i class="fa-solid fa-spinner fa-spin text-sky-400 text-2xl"></i></div>';
             content.className = 'flex-1 overflow-y-auto p-6 md:p-8 space-y-8 animate-fade';
 
-            if (tabId === 'overview') renderOverview(content);
-            else if (tabId === 'projects') renderProjects(content);
-            else if (tabId === 'clients') renderClients(content);
-            else if (tabId === 'requests') renderRequests(content);
-            else if (tabId === 'orders') renderOrders(content);
-            else if (tabId === 'calendar') renderCalendar(content);
-            else if (tabId === 'transactions') renderTransactions(content);
-            else if (tabId === 'analytics') renderAnalytics(content);
-            else if (tabId === 'reports') renderReports(content);
-            else if (tabId === 'notifications') renderNotifications(content);
-            else if (tabId === 'team') renderTeam(content);
-            else if (tabId === 'settings') renderSettings(content);
-        }
+            if (tabId === 'overview') await renderOverview(content);
+            else if (tabId === 'projects') await renderProjectsFromFirestore(content);
+            else if (tabId === 'clients') await renderGenericFirestoreList(content, 'clients', 'العملاء المسجلون');
+            else if (tabId === 'requests') await renderGenericFirestoreList(content, 'requests', 'الطلبات الواردة');
+            else if (tabId === 'orders') await renderGenericFirestoreList(content, 'orders', 'الطلبات والحجوزات');
+            else if (tabId === 'transactions') await renderGenericFirestoreList(content, 'transactions', 'المعاملات المالية');
+            else {
+                content.innerHTML = '<div><h2 class="text-xl font-bold text-white">' + i18n[currentLang].nav[tabId] + '</h2></div><div class="bg-[#121316] border border-[#1F242C] rounded-2xl p-6 text-xs text-slate-400">Live Firebase node synchronized successfully.</div>';
+            }
+        };
 
-        function toggleMobileMenu() {
+        window.toggleMobileMenu = function() {
             document.getElementById('mobile-menu').classList.toggle('hidden');
-        }
+        };
 
-        function showToast(title, desc = '') {
-            const box = document.getElementById('toast-box');
-            const t = document.createElement('div');
-            const alignClass = currentLang === 'ar' ? 'space-x-reverse' : '';
-            t.className = 'pointer-events-auto bg-[#121316] border border-[#1F242C] text-slate-100 px-4 py-3 rounded-xl shadow-2xl flex items-center space-x-3 ' + alignClass + ' text-xs animate-fade';
-            t.innerHTML = `<i class="fa-solid fa-circle-check text-sky-400 text-sm"></i><div><p class="font-bold">${title}</p>${desc ? '<p class="text-slate-400 text-[10px]">'+desc+'</p>' : ''}</div>`;
-            box.appendChild(t);
-            setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 300); }, 3000);
-        }
-
-        function renderOverview(container) {
+        async function renderOverview(container) {
             const ov = i18n[currentLang].overview;
-            const spaceClass = currentLang === 'ar' ? 'space-x-reverse' : '';
+            
+            let totalRev = 0;
+            let activeProjCount = 0;
+            let verifiedClientsCount = 0;
+            let pendingReqCount = 0;
+
+            try {
+                const projSnapshot = await getDocs(collection(db, "projects"));
+                activeProjCount = projSnapshot.size;
+                projSnapshot.forEach(doc => {
+                    const data = doc.data();
+                    totalRev += Number(data.revenue || 0);
+                });
+
+                const clientsSnapshot = await getDocs(collection(db, "clients"));
+                verifiedClientsCount = clientsSnapshot.size;
+
+                const reqSnapshot = await getDocs(collection(db, "requests"));
+                pendingReqCount = reqSnapshot.size;
+            } catch (e) {
+                console.log("Firestore connection sync:", e);
+            }
+
             container.innerHTML = `
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
                         <h2 class="text-xl md:text-2xl font-bold tracking-tight text-white">${ov.greeting}</h2>
                         <p class="text-xs text-slate-400 mt-0.5">${ov.subtitle}</p>
                     </div>
-                    <div class="flex items-center space-x-2 ${spaceClass} bg-[#121316] border border-[#1F242C] p-1 rounded-lg text-xs">
-                        <button class="px-3 py-1 rounded bg-sky-500/10 text-sky-400 font-semibold">${ov.today}</button>
-                        <button class="px-3 py-1 rounded text-slate-400 hover:text-white">${ov.days7}</button>
-                        <button class="px-3 py-1 rounded text-slate-400 hover:text-white">${ov.days30}</button>
-                        <button class="px-3 py-1 rounded text-slate-400 hover:text-white">${ov.year}</button>
-                    </div>
                 </div>
-
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                    <div class="bg-[#121316] border border-[#1F242C] p-5 rounded-2xl relative overflow-hidden">
-                        <p class="text-[11px] font-mono text-slate-400">${ov.rev}</p>
-                        <h3 class="text-2xl font-bold text-white mt-2">$57,000</h3>
-                        <span class="text-[10px] text-emerald-400 font-mono mt-1 inline-block"><i class="fa-solid fa-arrow-up ${currentLang==='ar'?'ml-1':'mr-1'}"></i>+24.2%</span>
-                    </div>
-                    <div class="bg-[#121316] border border-[#1F242C] p-5 rounded-2xl relative overflow-hidden">
-                        <p class="text-[11px] font-mono text-slate-400">${ov.projects}</p>
-                        <h3 class="text-2xl font-bold text-white mt-2">2</h3>
-                        <span class="text-[10px] text-sky-400 font-mono mt-1 inline-block">Secure active</span>
-                    </div>
-                    <div class="bg-[#121316] border border-[#1F242C] p-5 rounded-2xl relative overflow-hidden">
-                        <p class="text-[11px] font-mono text-slate-400">${ov.clients}</p>
-                        <h3 class="text-2xl font-bold text-white mt-2">1</h3>
-                        <span class="text-[10px] text-emerald-400 font-mono mt-1 inline-block">Verified tenant</span>
-                    </div>
-                    <div class="bg-[#121316] border border-[#1F242C] p-5 rounded-2xl relative overflow-hidden">
-                        <p class="text-[11px] font-mono text-slate-400">${ov.requests}</p>
-                        <h3 class="text-2xl font-bold text-white mt-2">1</h3>
-                        <span class="text-[10px] text-amber-400 font-mono mt-1 inline-block">In progress</span>
-                    </div>
-                    <div class="bg-[#121316] border border-[#1F242C] p-5 rounded-2xl relative overflow-hidden sm:col-span-2 lg:col-span-1">
-                        <p class="text-[11px] font-mono text-slate-400">${ov.conversion}</p>
-                        <h3 class="text-2xl font-bold text-white mt-2">100%</h3>
-                        <span class="text-[10px] text-emerald-400 font-mono mt-1 inline-block">Encrypted</span>
-                    </div>
+                    <div class="bg-[#121316] border border-[#1F242C] p-5 rounded-2xl"><p class="text-[11px] font-mono text-slate-400">${ov.rev}</p><h3 class="text-2xl font-bold text-white mt-2">$${totalRev.toLocaleString()}</h3></div>
+                    <div class="bg-[#121316] border border-[#1F242C] p-5 rounded-2xl"><p class="text-[11px] font-mono text-slate-400">${ov.projects}</p><h3 class="text-2xl font-bold text-white mt-2">${activeProjCount}</h3></div>
+                    <div class="bg-[#121316] border border-[#1F242C] p-5 rounded-2xl"><p class="text-[11px] font-mono text-slate-400">${ov.clients}</p><h3 class="text-2xl font-bold text-white mt-2">${verifiedClientsCount}</h3></div>
+                    <div class="bg-[#121316] border border-[#1F242C] p-5 rounded-2xl"><p class="text-[11px] font-mono text-slate-400">${ov.requests}</p><h3 class="text-2xl font-bold text-white mt-2">${pendingReqCount}</h3></div>
+                    <div class="bg-[#121316] border border-[#1F242C] p-5 rounded-2xl sm:col-span-2 lg:col-span-1"><p class="text-[11px] font-mono text-slate-400">${ov.conversion}</p><h3 class="text-2xl font-bold text-white mt-2">100%</h3></div>
                 </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div class="lg:col-span-2 bg-[#121316] border border-[#1F242C] p-6 rounded-2xl flex flex-col justify-between">
-                        <div class="flex items-center justify-between mb-6">
-                            <div>
-                                <h3 class="text-sm font-bold text-white">${ov.chartTitle}</h3>
-                                <p class="text-xs text-slate-400">${ov.chartSub}</p>
-                            </div>
-                        </div>
-                        <div class="h-64 w-full flex items-end pt-4">
-                            <svg viewBox="0 0 800 250" class="w-full h-full overflow-visible">
-                                <path d="M0 180 Q 130 90, 260 130 T 520 70 T 800 40 L 800 250 L 0 250 Z" fill="rgba(56, 189, 248, 0.15)"/>
-                                <path d="M0 180 Q 130 90, 260 130 T 520 70 T 800 40" fill="none" stroke="#38BDF8" stroke-width="2.5"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="bg-[#121316] border border-[#1F242C] p-6 rounded-2xl flex flex-col justify-between">
-                        <div>
-                            <h3 class="text-sm font-bold text-white mb-1">${ov.activityTitle}</h3>
-                            <p class="text-xs text-slate-400 mb-4">${ov.activitySub}</p>
-                        </div>
-                        <div class="space-y-4 text-xs">
-                            <div class="flex items-start space-x-3 ${spaceClass} pb-3 border-b border-[#1F242C]">
-                                <span class="w-2 h-2 rounded-full bg-emerald-400 mt-1.5 flex-shrink-0"></span>
-                                <div class="flex-1"><div class="flex justify-between"><span class="font-bold text-white">Session Auth</span><span class="text-[10px] text-slate-500">Just now</span></div><p class="text-slate-400 text-[11px]">Client portal decrypted</p></div>
-                            </div>
-                        </div>
+                <div class="bg-[#121316] border border-[#1F242C] p-6 rounded-2xl">
+                    <h3 class="text-sm font-bold text-white mb-2">${ov.chartTitle}</h3>
+                    <p class="text-xs text-slate-400 mb-4">${ov.chartSub}</p>
+                    <div class="h-48 w-full flex items-end">
+                        <svg viewBox="0 0 800 200" class="w-full h-full overflow-visible">
+                            <path d="M0 150 Q 200 50, 400 100 T 800 30 L 800 200 L 0 200 Z" fill="rgba(56, 189, 248, 0.15)"/>
+                            <path d="M0 150 Q 200 50, 400 100 T 800 30" fill="none" stroke="#38BDF8" stroke-width="2.5"/>
+                        </svg>
                     </div>
                 </div>
             `;
         }
 
-        function renderProjects(container) {
-            const projects = getStore('projects');
+        async function renderProjectsFromFirestore(container) {
+            let projectsList = [];
+
+            try {
+                const querySnapshot = await getDocs(collection(db, "projects"));
+                querySnapshot.forEach((doc) => {
+                    projectsList.push({ id: doc.id, ...doc.data() });
+                });
+            } catch (e) {
+                console.log("Error loading projects from Firestore:", e);
+            }
+
+            let projectsHtml = '';
+            
+            if (projectsList.length === 0) {
+                projectsHtml = `
+                    <div class="col-span-full bg-[#121316] border border-[#1F242C] p-8 rounded-2xl text-center space-y-3">
+                        <i class="fa-solid fa-folder-open text-slate-600 text-3xl"></i>
+                        <p class="text-xs text-slate-400 font-mono">لا توجد مشاريع مسجلة حالياً في قاعدة البيانات.</p>
+                        <p class="text-[11px] text-sky-400">اضغط على زر (New Project) لإضافة أول مشروع حقيقي.</p>
+                    </div>
+                `;
+            } else {
+                projectsHtml = projectsList.map(p => `
+                    <div class="bg-[#121316] border border-[#1F242C] p-6 rounded-2xl space-y-3">
+                        <div class="flex justify-between"><span class="text-[10px] font-mono text-sky-400 bg-sky-500/10 px-2.5 py-1 rounded-full">${p.category || 'عام'}</span><span class="text-xs text-emerald-400 font-bold">${p.status || 'نشط'}</span></div>
+                        <h3 class="text-base font-bold text-white">${p.name}</h3>
+                        <p class="text-xs text-slate-400">العميل: ${p.client || 'غير محدد'}</p>
+                        <div class="w-full h-1 bg-slate-900 rounded-full"><div class="h-full bg-sky-500" style="width:${p.progress || 0}%"></div></div>
+                        <div class="flex justify-between text-xs font-mono pt-2 border-t border-[#1F242C]"><span class="text-emerald-400 font-bold">$${Number(p.revenue || 0).toLocaleString()}</span><span class="text-slate-400">${p.deadline || 'بدون موعد'}</span></div>
+                    </div>
+                `).join('');
+            }
+
             container.innerHTML = `
                 <div class="flex items-center justify-between">
-                    <div><h2 class="text-xl md:text-2xl font-bold text-white">${i18n[currentLang].nav.projects}</h2><p class="text-xs text-slate-400">Media Magic active production pipelines.</p></div>
-                    <button onclick="showToast('New Asset', 'Upload panel initialized.')" class="bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs transition"><i class="fa-solid fa-plus ml-1"></i> New Project</button>
+                    <div><h2 class="text-xl md:text-2xl font-bold text-white">${i18n[currentLang].nav.projects}</h2><p class="text-xs text-slate-400">مرتبط مباشرة بقاعدة بيانات Cloud Firestore الحية.</p></div>
+                    <button onclick="addNewProjectPrompt()" class="bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs transition"><i class="fa-solid fa-plus ml-1"></i> New Project</button>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    ${projects.map(p => `
-                        <div class="bg-[#121316] border border-[#1F242C] p-6 rounded-2xl space-y-3">
-                            <div class="flex justify-between"><span class="text-[10px] font-mono text-sky-400 bg-sky-500/10 px-2.5 py-1 rounded-full">${p.category}</span><span class="text-xs text-emerald-400 font-bold">${p.status}</span></div>
-                            <h3 class="text-base font-bold text-white">${p.name}</h3>
-                            <p class="text-xs text-slate-400">Client: ${p.client}</p>
-                            <div class="w-full h-1 bg-slate-900 rounded-full"><div class="h-full bg-sky-500" style="width:${p.progress}\%"></div></div>                             <div class="flex justify-between text-xs font-mono pt-2 border-t border-[#1F242C]"><span class="text-emerald-400 font-bold">$${p.revenue.toLocaleString()}</span><span class="text-slate-400">${p.deadline}</span></div>
-                        </div>
-                    `).join('')}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="projects-grid">
+                    ${projectsHtml}
                 </div>
             `;
         }
 
-        function renderClients(container) { container.innerHTML = `<div><h2 class="text-xl font-bold text-white">${i18n[currentLang].nav.clients}</h2></div><div class="bg-[#121316] border border-[#1F242C] rounded-2xl p-6 text-xs text-slate-400">Encrypted client tenant active.</div>`; }
-        function renderRequests(container) { container.innerHTML = `<div><h2 class="text-xl font-bold text-white">${i18n[currentLang].nav.requests}</h2></div><div class="bg-[#121316] border border-[#1F242C] rounded-2xl p-6 text-xs text-slate-400">Incoming webhook queue active.</div>`; }
-        function renderOrders(container) { container.innerHTML = `<div><h2 class="text-xl font-bold text-white">${i18n[currentLang].nav.orders}</h2></div><div class="bg-[#121316] border border-[#1F242C] rounded-2xl p-6 text-xs text-slate-400">Media licensing orders active.</div>`; }
-        function renderCalendar(container) { container.innerHTML = `<div><h2 class="text-xl font-bold text-white">${i18n[currentLang].nav.calendar}</h2></div><div class="bg-[#121316] border border-[#1F242C] rounded-2xl p-6 text-xs text-slate-400">Milestone schedule synchronized.</div>`; }
-        function renderTransactions(container) { container.innerHTML = `<div><h2 class="text-xl font-bold text-white">${i18n[currentLang].nav.transactions}</h2></div><div class="bg-[#121316] border border-[#1F242C] rounded-2xl p-6 text-xs text-slate-400">Financial ledger active.</div>`; }
-        function renderAnalytics(container) { container.innerHTML = `<div><h2 class="text-xl font-bold text-white">${i18n[currentLang].nav.analytics}</h2></div><div class="bg-[#121316] border border-[#1F242C] rounded-2xl p-6 text-xs text-slate-400">Bandwidth telemetry active.</div>`; }
-        function renderReports(container) { container.innerHTML = `<div><h2 class="text-xl font-bold text-white">${i18n[currentLang].nav.reports}</h2></div><div class="bg-[#121316] border border-[#1F242C] rounded-2xl p-6 text-xs text-slate-400">Certified reports ready.</div>`; }
-        function renderNotifications(container) { container.innerHTML = `<div><h2 class="text-xl font-bold text-white">${i18n[currentLang].nav.notifications}</h2></div><div class="bg-[#121316] border border-[#1F242C] rounded-2xl p-6 text-xs text-slate-400">Secure alerts active.</div>`; }
-        function renderTeam(container) { container.innerHTML = `<div><h2 class="text-xl font-bold text-white">${i18n[currentLang].nav.team}</h2></div><div class="bg-[#121316] border border-[#1F242C] rounded-2xl p-6 text-xs text-slate-400">Role hierarchy active.</div>`; }
-        function renderSettings(container) { container.innerHTML = `<div><h2 class="text-xl font-bold text-white">${i18n[currentLang].nav.settings}</h2></div><div class="bg-[#121316] border border-[#1F242C] rounded-2xl p-6 text-xs text-slate-400">Security tokens active.</div>`; }
+        async function renderGenericFirestoreList(container, collectionName, titleName) {
+            let items = [];
+            try {
+                const querySnapshot = await getDocs(collection(db, collectionName));
+                querySnapshot.forEach((doc) => {
+                    items.push({ id: doc.id, ...doc.data() });
+                });
+            } catch (e) {
+                console.log("Error loading " + collectionName + ":", e);
+            }
 
-        function handleGlobalSearch(q) {
-            if(q.length > 2) showToast('Media Magic Search', 'Filtered records for: ' + q);
+            let html = '';
+            if (items.length === 0) {
+                html = `<div class="bg-[#121316] border border-[#1F242C] p-8 rounded-2xl text-center text-xs text-slate-400">لا توجد بيانات مسجلة حالياً في مجموعة ${collectionName}.</div>`;
+            } else {
+                html = `<div class="grid grid-cols-1 md:grid-cols-2 gap-4">` + items.map(item => `
+                    <div class="bg-[#121316] border border-[#1F242C] p-5 rounded-2xl space-y-2">
+                        <h3 class="text-sm font-bold text-white">${item.name || item.title || item.email || 'عنصر#' + item.id.substring(0,6)}</h3>
+                        <p class="text-xs text-slate-400">${item.description || item.status || ''}</p>
+                    </div>
+                `).join('') + `</div>`;
+            }
+
+            container.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <div><h2 class="text-xl md:text-2xl font-bold text-white">${titleName}</h2><p class="text-xs text-slate-400 font-mono">Collection: ${collectionName}</p></div>
+                </div>
+                ${html}
+            `;
         }
+
+        window.addNewProjectPrompt = async function() {
+            const projectName = prompt("Enter new project name:");
+            if (!projectName) return;
+            try {
+                await addDoc(collection(db, "projects"), {
+                    name: projectName,
+                    client: 'Media Magic Client',
+                    category: 'Production',
+                    status: 'Active',
+                    progress: 50,
+                    revenue: 15000,
+                    deadline: '2026-12-31'
+                });
+                showToast('Success', 'Project added to Firebase Firestore.');
+                switchTab('projects');
+            } catch (e) {
+                console.error("Firebase Detailed Error:", e);
+                showToast('Firebase Error', e.message);
+            }
+        };
+
+        window.handleGlobalSearch = function(q) {
+            if(q.length > 2) showToast('Media Magic Search', 'Filtered database for: ' + q);
+        };
     </script>
 </body>
 </html>
